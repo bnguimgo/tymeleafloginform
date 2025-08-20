@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr" xml:lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<h1>Login</h1>
+<p th:if="${param.error}" class="error">Invalid username or password</p>
+<form th:action="@{/login}" method="post">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" autofocus="autofocus" />
+    <br />
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" />
+    <br />
+    <input type="submit" value="Log in 3" />
+</form>
+</body>
+</html>
