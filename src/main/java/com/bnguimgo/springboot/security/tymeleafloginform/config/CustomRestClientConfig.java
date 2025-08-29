@@ -1,5 +1,6 @@
 package com.bnguimgo.springboot.security.tymeleafloginform.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestClient;
@@ -11,10 +12,12 @@ import org.springframework.web.client.RestClient;
 @Configuration
 public class CustomRestClientConfig {
 
+    @Autowired
+    PropertiesServiceConfig properties;
     @Bean
     public RestClient restClient() {
         return RestClient.builder()
-                .baseUrl("http://localhost:8094/bibliocentrale") // Url API côté serveur
+                .baseUrl(properties.getServerUrl()) // Url API côté serveur
                 //.defaultHeader("", "")//On peut ajouter un header avec plusieurs paramètres
                 .build();
     }

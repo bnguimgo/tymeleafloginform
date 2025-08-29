@@ -5,6 +5,9 @@ import com.bnguimgo.springboot.security.tymeleafloginform.service.AuthorService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.MalformedURLException;
+import java.text.ParseException;
+
 @RestController
 @RequestMapping("/api/v1/authors")
 public class AuthorController {
@@ -16,7 +19,7 @@ public class AuthorController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AuthorDTO> getAuthorById(@PathVariable(value = "id") Long id) {
+    public ResponseEntity<AuthorDTO> getAuthorById(@PathVariable(value = "id") Long id) throws MalformedURLException, ParseException {
         return authorService.getAuthorById(id);
     }
 
