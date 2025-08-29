@@ -1,5 +1,6 @@
 package com.bnguimgo.springboot.security.tymeleafloginform.config;
 
+import com.bnguimgo.springboot.security.tymeleafloginform.security.userdetails.CustomUserDetails;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -27,10 +28,11 @@ public class CustomLogoutSuccessHandler implements LogoutHandler {
         //String userName = UserUtils.getAuthenticatedUserName();
         //userCache.removeUserFromCache("xxx");
         if(null != authentication) {
-            DefaultOidcUser authenticatedUser = (DefaultOidcUser) authentication.getPrincipal();
+/*            DefaultOidcUser authenticatedUser = (DefaultOidcUser) authentication.getPrincipal();
             Map<String, Object> authUserAttributes = authenticatedUser.getAttributes();
-            String userName = authUserAttributes.get("username").toString();
-            log.warn("User : {} logout successful, the authentication will be set to false", userName);
+            String userName = authUserAttributes.get("username").toString();*/
+            CustomUserDetails authenticatedUser = (CustomUserDetails) authentication.getPrincipal();
+            log.warn("User : {} logout successful, the authentication will be set to false", authenticatedUser.getUsername());
             authentication.setAuthenticated(false);
 
         } else {

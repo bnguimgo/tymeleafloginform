@@ -12,15 +12,28 @@
 
         <div sec:authorize="isAuthenticated()">
             <div>
-                Hello, <strong th:text="${#authentication.getPrincipal().getAttributes().name}"></strong>!
+                Hello, <strong th:text="${#authentication.getPrincipal()}"></strong>!
                 <br>
+                <br>
+                <div sec:authorize="hasAuthority('USER')">Text visible to user.</div>
+                <div sec:authorize="hasAuthority('ADMIN')">Text visible to admin.</div>
+
+                Authenticated name:
+                <div sec:authentication="name"></div>
+                Authenticated user's username:
+                <div sec:authentication="principal.username"></div>
+                Authenticated user's displayName:
+                <div sec:authentication="principal.displayName"></div>
+                <br>
+                Authenticated user roles:
+                <div sec:authentication="principal.authorities"></div>
                 <br>
             </div>
             <div>
-                Here are all the OIDC properties you can use: <div th:text="${#authentication.getPrincipal()}"/>
+                Here are all the OIDC properties you can use: <div th:text="${#authentication.getPrincipal().username}"></div>
                 <br>
                 <br>
-                Here is your username: <div th:text="${#authentication.getPrincipal().getAttributes().username}"/>
+                Here is your username: <div th:text="${#authentication.getPrincipal()}"></div>
                 <br>
                 <br>
             </div>
@@ -31,7 +44,7 @@
 
         <div sec:authorize="isAnonymous()">
             <div>
-                <a th:href="@{/oauth2/authorization/cognito}"><button>Log in</button></a>
+                <a th:href="@{/oauth2/authorization/cognito}"><button>Log in with Cognito</button></a>
             </div>
         </div>
     </div>
