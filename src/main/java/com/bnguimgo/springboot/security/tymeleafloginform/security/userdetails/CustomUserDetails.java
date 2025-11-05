@@ -16,7 +16,7 @@ public class CustomUserDetails implements UserDetails {
     private final String displayName;
     @Getter
     @Setter
-    private String accessToken;
+    private String idToken;
     private final Set<GrantedAuthority> authorities;
     @Getter
     private final Set<String> roles;

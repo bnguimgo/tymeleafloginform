@@ -29,10 +29,11 @@ public class AuthorService {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails customUserDetails = (CustomUserDetails)authentication.getPrincipal();
-        customIDTokenValidator.validate(customUserDetails.getAccessToken());
+        String idToken = customUserDetails.getIdToken();
+        customIDTokenValidator.validate(idToken);
         return restClient.get()
                 .uri("/api/v1/authors/{id}", id)
-                .header("Authorization", "Bearer " + customUserDetails.getAccessToken())
+                .header("Authorization", "Bearer " + idToken)
                 .retrieve()
                 .toEntity(AuthorDTO.class);
     }

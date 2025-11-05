@@ -9,13 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.client.OAuth2AuthorizeRequest;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
-import org.springframework.security.oauth2.core.oidc.IdTokenClaimNames;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -39,13 +37,13 @@ public class UserAuthenticationSuccessHandler implements AuthenticationSuccessHa
 
         DefaultOidcUser authenticatedUser = (DefaultOidcUser) authentication.getPrincipal();
         Map<String, Object> authUserAttributes = authenticatedUser.getAttributes();
-        String userName = authUserAttributes.get("username").toString();
+        String email = authUserAttributes.get("email").toString();
         authentication.setAuthenticated(true);
-        log.info("Authentication successful with username : {}", userName);
+        log.info("Authentication successful with email : {}", email);
 
-        CustomUserDetails userDetails = userDetailsService.loadUserByUsername(userName);
+        CustomUserDetails userDetails = userDetailsService.loadUserByUsername(email);
         //userDetails.setAccessToken(getAccessToken().getTokenValue());
-        userDetails.setAccessToken(getIdToken().getTokenValue());
+        userDetails.setIdToken(getIdToken().getTokenValue());
             UsernamePasswordAuthenticationToken usernamePasswordAuthToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             usernamePasswordAuthToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 

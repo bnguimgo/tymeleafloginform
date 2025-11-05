@@ -1,4 +1,4 @@
-package com.bnguimgo.springboot.security.tymeleafloginform.config;
+package com.bnguimgo.springboot.security.tymeleafloginform.security.succes;
 
 import com.bnguimgo.springboot.security.tymeleafloginform.security.userdetails.CustomUserDetails;
 import jakarta.servlet.http.HttpServletRequest;

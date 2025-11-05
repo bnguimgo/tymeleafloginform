@@ -9,7 +9,7 @@
 <div>
     <div>
         <h1>AWS Cognito Demo App</h1>
-
+        <span>Version-<th:block th:text="${@environment.getProperty('application.client.version')}"></th:block></span>
         <div sec:authorize="isAuthenticated()">
             <div>
                 Hello, <strong th:text="${#authentication.getPrincipal()}"></strong>!

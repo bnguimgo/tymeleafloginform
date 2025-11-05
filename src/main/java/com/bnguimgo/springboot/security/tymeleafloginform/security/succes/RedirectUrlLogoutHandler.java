@@ -1,5 +1,6 @@
-package com.bnguimgo.springboot.security.tymeleafloginform.config;
+package com.bnguimgo.springboot.security.tymeleafloginform.security.succes;
 
+import com.bnguimgo.springboot.security.tymeleafloginform.config.PropertiesServiceConfig;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;

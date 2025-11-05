@@ -16,7 +16,7 @@ import java.util.Set;
 
 @Configuration
 @EnableWebMvc
-public class ThymeleafConfiguration implements WebMvcConfigurer {
+public class ThymeleafWebMvcConfigurerImpl implements WebMvcConfigurer {
  
     @Bean
     public SpringTemplateEngine templateEngine() {

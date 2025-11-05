@@ -1,6 +1,6 @@
 package com.bnguimgo.springboot.security.tymeleafloginform.security;
 
-import com.bnguimgo.springboot.security.tymeleafloginform.config.RedirectUrlLogoutHandler;
+import com.bnguimgo.springboot.security.tymeleafloginform.security.succes.RedirectUrlLogoutHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -59,7 +59,7 @@ public class AppSecurityConfig {
                 //.csrf(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/api/v1/authors/**").hasAuthority("ADMIN")
+                        .requestMatchers("/api/v1/authors/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_MANAGER", "ROLE_USER")
                         .requestMatchers("/").permitAll()
                         .anyRequest()
                         .authenticated())
