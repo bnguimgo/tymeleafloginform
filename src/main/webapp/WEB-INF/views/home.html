@@ -12,11 +12,11 @@
         <span>Version-<th:block th:text="${@environment.getProperty('application.client.version')}"></th:block></span>
         <div sec:authorize="isAuthenticated()">
             <div>
-                Hello, <strong th:text="${#authentication.getPrincipal()}"></strong>!
+                Hello, <strong th:text="${#authentication.getPrincipal().getDisplayName()}"></strong>!
                 <br>
                 <br>
-                <div sec:authorize="hasAuthority('USER')">Text visible to user.</div>
-                <div sec:authorize="hasAuthority('ADMIN')">Text visible to admin.</div>
+                <div sec:authorize="hasAuthority('ROLE_USER')">You have user role.</div>
+                <div sec:authorize="hasAuthority('ROLE_ADMIN')">You have admin role.</div>
 
                 Authenticated name:
                 <div sec:authentication="name"></div>
@@ -30,12 +30,25 @@
                 <br>
             </div>
             <div>
-                Here are all the OIDC properties you can use: <div th:text="${#authentication.getPrincipal().username}"></div>
+                Here are all the OIDC properties you can use: <div th:text="${#authentication.getPrincipal().getUsername()}"></div>
                 <br>
                 <br>
                 Here is your username: <div th:text="${#authentication.getPrincipal()}"></div>
                 <br>
                 <br>
+            </div>
+            <div>
+                <table>
+                    <tr>
+                        <td>My context attribute</td>
+                        <!--<td th:text="${connectedUser.displayName}">42</td>-->
+                        <td th:text="${#authentication.getPrincipal().getDisplayName()}">42</td>
+                    </tr>
+<!--                    <tr th:each="attr : ${#servletContext.getAttributeNames()}">
+                        <td th:text="${attr}">javax.servlet.context.tempdir</td>
+                        <td th:text="${#servletContext.getAttribute(attr)}">/tmp</td>
+                    </tr>-->
+                </table>
             </div>
             <div>
                 <a th:href="@{/logout}"><button>Log out</button></a>

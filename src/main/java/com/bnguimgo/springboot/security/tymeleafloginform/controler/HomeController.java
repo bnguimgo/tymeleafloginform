@@ -1,9 +1,11 @@
 package com.bnguimgo.springboot.security.tymeleafloginform.controler;
 
+import com.bnguimgo.springboot.security.tymeleafloginform.security.userdetails.CustomUserDetails;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -11,6 +13,16 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 //@RequestMapping("/login")
 public class HomeController {
+
+/*    @RequestMapping(value={"/"})
+    public String loginForm(Model model, Authentication authentication) {
+        if(null!= authentication && authentication.getPrincipal() instanceof CustomUserDetails customUserDetails) {
+            model.addAttribute("connectedUser", customUserDetails);
+            return "home";
+        }
+
+        return "redirect:/oauth2/authorization/cognito";
+    }*/
 
 /*    @RequestMapping(value={"/", "/login"})
     public String loginForm() {

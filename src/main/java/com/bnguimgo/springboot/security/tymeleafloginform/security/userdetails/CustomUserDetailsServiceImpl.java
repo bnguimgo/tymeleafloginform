@@ -31,7 +31,7 @@ public class CustomUserDetailsServiceImpl implements UserDetailsService {
         try {
             User user = loginService.loginByEmail(username).getBody();
 
-            CustomUserDetails userDetails = new CustomUserDetails(user.getFirstName(), user.getLastName(), buildAuthoritiesFromRole(user.getRoles()));
+            CustomUserDetails userDetails = new CustomUserDetails(user.getFirstName(), user.getFirstName() +" " +user.getLastName(), buildAuthoritiesFromRole(user.getRoles()));
             log.info("loadUserByUsername successful");
             return userDetails;
 

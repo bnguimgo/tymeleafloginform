@@ -28,11 +28,8 @@ public class CustomLogoutSuccessHandler implements LogoutHandler {
         //String userName = UserUtils.getAuthenticatedUserName();
         //userCache.removeUserFromCache("xxx");
         if(null != authentication) {
-/*            DefaultOidcUser authenticatedUser = (DefaultOidcUser) authentication.getPrincipal();
-            Map<String, Object> authUserAttributes = authenticatedUser.getAttributes();
-            String userName = authUserAttributes.get("username").toString();*/
             CustomUserDetails authenticatedUser = (CustomUserDetails) authentication.getPrincipal();
-            log.warn("User : {} logout successful, the authentication will be set to false", authenticatedUser.getUsername());
+            log.warn("User : {} logout successful, the authentication will be set to false", authenticatedUser.getDisplayName());
             authentication.setAuthenticated(false);
 
         } else {
