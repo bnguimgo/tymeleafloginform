@@ -1,0 +1,33 @@
+h1{
+	color:#0000FF;
+}
+
+h2{
+	color:#FF0000;
+}
+h3{
+	color:#0000FF;
+}
+h4{
+	color:#FF0000;
+}
+
+.error {
+	color: red;
+	font-weight: 100;
+	font-style: italic;
+}
+.panelShadow {
+	box-shadow: 10px 10px 5px grey;
+}
+
+.headerH3Style {
+ 	border-bottom: 1px solid gray;
+  	color:#a2a3a7;
+ 	text-shadow: 1px 1px #0e0275;
+}
+
+#password + .glyphicon {
+    cursor: pointer;
+    pointer-events: all;
+}

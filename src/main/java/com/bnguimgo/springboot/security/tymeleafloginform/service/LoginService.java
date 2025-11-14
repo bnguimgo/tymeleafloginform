@@ -36,15 +36,29 @@ public class LoginService {
      */
     public ResponseEntity<User> loginByEmail(String email) throws MalformedURLException, ParseException {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        DefaultOidcUser customUserDetails = (DefaultOidcUser)authentication.getPrincipal();
-        String idToken = customUserDetails.getIdToken().getTokenValue();
-        customIDTokenValidator.validate(idToken);
+        String valideIdToken = validateToken(SecurityContextHolder.getContext().getAuthentication());
         return restClient.get()
                 .uri("/api/v1/users/{email}", email)
-                .header("Authorization", "Bearer " + idToken)
+                .header("Authorization", "Bearer " + valideIdToken)
                 .retrieve()
                 .toEntity(User.class);
+    }
+
+    private String validateToken(Authentication authentication) throws ParseException, MalformedURLException {
+        //Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(null == authentication) {
+            throw new ParseException("Authentication required ", 0);
+        }
+        if(authentication.getPrincipal() instanceof DefaultOidcUser customUserDetails) {
+            String idToken = customUserDetails.getIdToken().getTokenValue();
+            return customIDTokenValidator.validate(idToken);
+        } else if(authentication.getPrincipal() instanceof CustomUserDetails customUserDetails) {
+            String idToken = customUserDetails.getIdToken();
+            return customIDTokenValidator.validate(idToken);
+        } else {
+            throw new ParseException("Unknown authentication method ", 0);
+        }
+
     }
 
     /**
@@ -56,13 +70,10 @@ public class LoginService {
      */
     public ResponseEntity<User> findByEmail(String email) throws MalformedURLException, ParseException {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        CustomUserDetails customUserDetails = (CustomUserDetails)authentication.getPrincipal();
-        String idToken = customUserDetails.getIdToken();
-        customIDTokenValidator.validate(idToken);
+        String valideIdToken = validateToken(SecurityContextHolder.getContext().getAuthentication());
         return restClient.get()
                 .uri("/api/v1/users/{email}", email)
-                .header("Authorization", "Bearer " + idToken)
+                .header("Authorization", "Bearer " + valideIdToken)
                 .retrieve()
                 .toEntity(User.class);
     }

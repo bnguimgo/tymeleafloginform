@@ -41,7 +41,7 @@ public class CustomIDTokenValidator {
         return new IDTokenValidator(iss, clientID, jwsAlg, jwkSetURL);
     }
 
-    public void validate (String token) throws ParseException, MalformedURLException {
+    public String validate (String token) throws ParseException, MalformedURLException {
 
         // Set the expected nonce, leave null if none
         //Nonce expectedNonce = new Nonce("hyfxBw5DlwS97Uo_fV9cscVp8JMqUWSovwzB4GmLKmg"); // or null
@@ -66,6 +66,6 @@ public class CustomIDTokenValidator {
             // Internal processing exception
             log.error("IDTokenValidator JOSEException " + e.getMessage());
         }
-
+        return token;
     }
 }

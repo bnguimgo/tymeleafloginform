@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" 
+      xmlns:jsp="http://www.w3.org/2001/XMLSchema"
+      lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="../../../resources/static/images/favicon.ico" />
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"> </script>
+    <script src="https://kit.fontawesome.com/0a48c3a8e0.js" crossorigin="anonymous"></script>
+
+    <!--<link rel="stylesheet" href="style.css" />-->
+
+    <title>AWS Cognito Demo App</title>
+</head>
+<body>
+    <div>
+        <div th:replace="~{include/navbar :: custom_navbar}"></div>
+
+        <h1>Add User Demo App</h1>
+
+        <form action="#" th:action="@{/adduser}" th:object="${user}" method="post">
+            <label for="lastName">Nom</label>
+            <input type="text" th:field="*{lastName}" id="lastName" placeholder="Nom">
+            <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></span>
+            <label for="firstName">Prénom</label>
+            <input type="text" th:field="*{firstName}" id="firstName" placeholder="Prénom">
+            <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></span>
+            <label for="email">Email</label>
+            <input type="text" th:field="*{email}" id="email" placeholder="Email">
+            <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+            <br>
+            <input type="submit" value="Add User">
+        </form>
+
+        <div>
+            <a th:href="@{/logout}"><button>Déconnexion</button></a>
+        </div>
+    </div>
+
+</body>
+</html>

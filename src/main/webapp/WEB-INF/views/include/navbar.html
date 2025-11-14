@@ -1,0 +1,26 @@
+<div th:fragment="custom_navbar">
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" th:href="@{/oauth2/authorization/cognito}">Bibliothèque</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li class="active"><a th:href="@{/oauth2/authorization/cognito}">Accueil</a></li>
+                <li><a href="#">Page 1</a></li>
+                <li><a href="#">Page 2</a></li>
+                <li><a href="#">Page 3</a></li>
+                <li><a href="#"><span>Version-<th:block th:text="${@environment.getProperty('application.client.version')}"></th:block></span></a></li>
+            </ul>
+            <!-- Si l’utilisateur est connecté et possède le rôle ROLE_ADMIN → afficher son nom + bouton "Déconnexion" -->
+            <ul sec:authorize="isAuthenticated()" class="nav navbar-nav navbar-right">
+                <li><a href="#"><span sec:authorize="hasAuthority('ROLE_ADMIN')">Connecté ADMIN - </span><strong th:text="${#authentication.getPrincipal().getDisplayName()}"></strong></a></li>
+                <li><a th:href="@{/logout}"><span class="glyphicon glyphicon-log-out">&nbsp;</span>Deconnexion</a></li>
+            </ul>
+            <!-- Si l’utilisateur n'est pas connecté → afficher le bouton Créer Compte + bouton "Connexion" -->
+            <ul sec:authorize="!isAuthenticated()" class="nav navbar-nav navbar-right">
+                <li><a href="#"><span class="glyphicon glyphicon-user">&nbsp;</span>Créer Compte</a></li>
+                <li><a th:href="@{/oauth2/authorization/cognito}"><span class="glyphicon glyphicon-log-in">&nbsp;</span>Connexion</a></li>
+            </ul>
+        </div>
+    </nav>
+</div>

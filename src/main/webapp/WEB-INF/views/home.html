@@ -1,66 +1,126 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="../../../resources/static/images/favicon.ico" />
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"> </script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"> </script>
+    <!--<link rel="stylesheet" href="style.css" />-->
+
     <title>AWS Cognito Demo App</title>
 </head>
 <body>
-<div>
     <div>
-        <h1>AWS Cognito Demo App</h1>
-        <span>Version-<th:block th:text="${@environment.getProperty('application.client.version')}"></th:block></span>
-        <div sec:authorize="isAuthenticated()">
-            <div>
-                Hello, <strong th:text="${#authentication.getPrincipal().getDisplayName()}"></strong>!
-                <br>
-                <br>
-                <div sec:authorize="hasAuthority('ROLE_USER')">You have user role.</div>
-                <div sec:authorize="hasAuthority('ROLE_ADMIN')">You have admin role.</div>
+        <!-- Le fragment de code ci-dessous charge le menu ou la barre de navigation contenu dans le fichier include/navbar.html -->
+        <!-- NB:  la variable custom_navbar doit obligatoirement être déclarée dans le fichier navbar.htmlavec l'attribut fragment de Thymeleaf
+          Exemple: <div th:fragment="custom_navbar"> -->
+        <div th:replace="~{include/navbar :: custom_navbar}"></div>
+<!--        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#">Bibliothèque</a>
+                </div>
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">Accueil</a></li>
+                    <li><a href="#">Page 1</a></li>
+                    <li><a href="#">Page 2</a></li>
+                    <li><a href="#">Page 3</a></li>
+                    <li><a href="#"><span>Version-<th:block th:text="${@environment.getProperty('application.client.version')}"></th:block></span></a></li>
+                    <li sec:authorize="isAuthenticated()"><a href="#"><span sec:authorize="hasAuthority('ROLE_ADMIN')">ADMIN-</span><strong th:text="${#authentication.getPrincipal().getDisplayName()}"></strong></a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#"><span class="glyphicon glyphicon-user"></span>Register</a></li>
+                    <li><a th:href="@{/oauth2/authorization/cognito}"><span class="glyphicon glyphicon-log-in"></span>-Login</a></li>
+                </ul>
+            </div>
+        </nav>-->
 
-                Authenticated name:
-                <div sec:authentication="name"></div>
-                Authenticated user's username:
-                <div sec:authentication="principal.username"></div>
-                Authenticated user's displayName:
-                <div sec:authentication="principal.displayName"></div>
-                <br>
-                Authenticated user roles:
-                <div sec:authentication="principal.authorities"></div>
-                <br>
-            </div>
-            <div>
-                Here are all the OIDC properties you can use: <div th:text="${#authentication.getPrincipal().getUsername()}"></div>
-                <br>
-                <br>
-                Here is your username: <div th:text="${#authentication.getPrincipal()}"></div>
-                <br>
-                <br>
-            </div>
-            <div>
-                <table>
-                    <tr>
-                        <td>My context attribute</td>
-                        <!--<td th:text="${connectedUser.displayName}">42</td>-->
-                        <td th:text="${#authentication.getPrincipal().getDisplayName()}">42</td>
-                    </tr>
-<!--                    <tr th:each="attr : ${#servletContext.getAttributeNames()}">
-                        <td th:text="${attr}">javax.servlet.context.tempdir</td>
-                        <td th:text="${#servletContext.getAttribute(attr)}">/tmp</td>
-                    </tr>-->
-                </table>
-            </div>
-            <div>
-                <a th:href="@{/logout}"><button>Log out</button></a>
-            </div>
-        </div>
+            <h1>Bienvenu dans AWS Cognito Demo App</h1>
 
-        <div sec:authorize="isAnonymous()">
-            <div>
-                <a th:href="@{/oauth2/authorization/cognito}"><button>Log in with Cognito</button></a>
+            <div sec:authorize="isAuthenticated()">
+
+                <div th:switch="${users}">
+                    <h2 th:case="null">No users yet!</h2>
+                    <div th:case="*">
+                        <h2>Users</h2>
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Prénom</th>
+                                <th>Email</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="user : ${users}">
+                                <td th:text="${user.lastName}"></td>
+                                <td th:text="${user.firstName}"></td>
+                                <td th:text="${user.email}"></td>
+                                <td><a th:href="@{/edit/{id}(id=${user.id})}">Edit</a></td>
+                                <td><a th:href="@{/delete/{id}(id=${user.id})}">Delete</a></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p><a th:href="@{/api/v1/users/sign/signup}">Add a new user</a></p>
+                </div>
+
+
+                <div>
+                    Vous êtes connecté à COGNITO, <strong th:text="${#authentication.getPrincipal().getDisplayName()}"></strong>!
+                    <br>
+                    <br>
+                    <div sec:authorize="hasAuthority('ROLE_USER')">You have user role.</div>
+                    <div sec:authorize="hasAuthority('ROLE_ADMIN')">You have admin role.</div>
+
+                    Authenticated name:
+                    <div sec:authentication="name"></div>
+                    Authenticated user's username:
+                    <div sec:authentication="principal.username"></div>
+                    Authenticated user's displayName:
+                    <div sec:authentication="principal.displayName"></div>
+                    <br>
+                    Authenticated user roles:
+                    <div sec:authentication="principal.authorities"></div>
+                    <br>
+                </div>
+                <div>
+                    Here are all the OIDC properties you can use: <div th:text="${#authentication.getPrincipal().getUsername()}"></div>
+                    <br>
+                    <br>
+                    Here is your username: <div th:text="${#authentication.getPrincipal()}"></div>
+                    <br>
+                    <br>
+                </div>
+                <div>
+                    <table border="1px">
+                        <tr>
+                            <td>My context attribute</td>
+                            <!--<td th:text="${connectedUser.displayName}">42</td>-->
+                            <td th:text="${#authentication.getPrincipal().getDisplayName()}">42</td>
+                        </tr>
+    <!--                    <tr th:each="attr : ${#servletContext.getAttributeNames()}">
+                            <td th:text="${attr}">javax.servlet.context.tempdir</td>
+                            <td th:text="${#servletContext.getAttribute(attr)}">/tmp</td>
+                        </tr>-->
+                    </table>
+                </div>
+                <div>
+                    <a th:href="@{/logout}"><button>Déconnexion</button></a>
+                </div>
             </div>
-        </div>
+
+            <div sec:authorize="isAnonymous()">
+                <div>
+                    <a th:href="@{/oauth2/authorization/cognito}"><button>Connexion avec Cognito</button></a>
+                </div>
+            </div>
     </div>
-</div>
 </body>
 </html>
