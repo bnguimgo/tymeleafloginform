@@ -79,17 +79,21 @@ public class AppSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/api/v1/authors/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_MANAGER", "ROLE_USER")
-                        .requestMatchers("/").permitAll()
+                        .requestMatchers("/login", "/register", "/css/**", "/js/**").permitAll()
                         .anyRequest()
                         .authenticated())
                 //.oauth2Login(Customizer.withDefaults())//FIXME on peut utiliser cette configuration par défaut sans avoir besoin de authenticationSuccessHandler. --> la config ci-dessous est optionnelle
                 .oauth2Login(httpSecurityOAuth2LoginConfigurer -> {
-                    httpSecurityOAuth2LoginConfigurer.loginPage("/");
+                    httpSecurityOAuth2LoginConfigurer
+                            .loginPage("/login")
+                            .defaultSuccessUrl("/", true)
+                            .failureUrl("/login?error");
                     httpSecurityOAuth2LoginConfigurer.successHandler(authenticationSuccessHandler);
                 })
                 //.logout(httpSecurityLogoutConfigurer -> httpSecurityLogoutConfigurer.logoutSuccessUrl("/"));
                 .logout(logout -> {
-                    logout.logoutUrl("/logout");
+                    logout.logoutUrl("/logout")
+                            .logoutSuccessUrl("/login?logout");
                     logout.addLogoutHandler(customLogoutSuccessHandler);
                     logout.logoutSuccessHandler(redirectUrlLogoutHandler);
                     logout.clearAuthentication(true);

@@ -23,7 +23,7 @@
 
         <h1>Add User Demo App</h1>
 
-        <form action="#" th:action="@{/adduser}" th:object="${user}" method="post">
+        <form action="#" th:action="@{/api/v1/users/adduser}" th:object="${user}" method="post">
             <label for="lastName">Nom</label>
             <input type="text" th:field="*{lastName}" id="lastName" placeholder="Nom">
             <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></span>

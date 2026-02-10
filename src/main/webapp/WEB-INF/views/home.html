@@ -41,6 +41,24 @@
 
             <h1>Bienvenu dans AWS Cognito Demo App</h1>
 
+        <!-- Message si login incorrect -->
+        <div th:if="${param.error}">
+            <p style="color: red;">Erreur d'authentification.</p>
+            <p class="error" style="color: red;">
+                <span th:switch="${param.error[0]}">
+                    <span th:case="'BadCredentials'">Identifiant ou mot de passe incorrect</span>
+                    <span th:case="'Disabled'">Profil désactivé</span>
+                    <span th:case="'Locked'">Profil verrouillé</span>
+                    <span th:case="*">Vérifiez le certificat PKX</span>
+                </span>
+            </p>
+        </div>
+
+        <!-- Message si logout réussi -->
+        <div th:if="${param.logout}">
+            <p style="color: green;">Vous avez été déconnecté.</p>
+        </div>
+
             <div sec:authorize="isAuthenticated()">
 
                 <div th:switch="${users}">
@@ -103,7 +121,7 @@
                         <tr>
                             <td>My context attribute</td>
                             <!--<td th:text="${connectedUser.displayName}">42</td>-->
-                            <td th:text="${#authentication.getPrincipal().getDisplayName()}">42</td>
+                            <td th:text="${#authentication.getPrincipal().getUsername()}">42</td>
                         </tr>
     <!--                    <tr th:each="attr : ${#servletContext.getAttributeNames()}">
                             <td th:text="${attr}">javax.servlet.context.tempdir</td>

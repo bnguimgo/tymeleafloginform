@@ -34,7 +34,7 @@ public class CustomLogoutSuccessHandler implements LogoutHandler {
 
         } else {
             try {
-                response.sendRedirect(request.getContextPath() + "/");
+                response.sendRedirect(request.getContextPath() + "/login");
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

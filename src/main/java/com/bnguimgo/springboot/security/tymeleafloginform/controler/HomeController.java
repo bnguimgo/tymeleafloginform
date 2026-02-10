@@ -14,6 +14,16 @@ import org.springframework.web.servlet.ModelAndView;
 //@RequestMapping("/login")
 public class HomeController {
 
+/*    @GetMapping("/login")
+    public String login() {
+        return "home"; // renvoie home.html
+    }*/
+
+    @GetMapping("/loginCognito")
+    public String loginCognito() {
+        return "redirect:/oauth2/authorization/cognito";
+    }
+
 /*    @RequestMapping(value={"/"})
     public String loginForm(Model model, Authentication authentication) {
         if(null!= authentication && authentication.getPrincipal() instanceof CustomUserDetails customUserDetails) {

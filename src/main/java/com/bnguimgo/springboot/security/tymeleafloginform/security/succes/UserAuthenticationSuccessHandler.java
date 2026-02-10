@@ -50,7 +50,7 @@ public class UserAuthenticationSuccessHandler implements AuthenticationSuccessHa
             SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthToken);
 
         //If authentication success
-        response.sendRedirect(request.getContextPath() + "/");
+        response.sendRedirect(request.getContextPath() + "/login");
     }
 
     private OAuth2AccessToken getAccessToken() {

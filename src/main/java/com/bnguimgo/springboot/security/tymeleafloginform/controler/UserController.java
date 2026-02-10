@@ -2,6 +2,7 @@ package com.bnguimgo.springboot.security.tymeleafloginform.controler;
 
 import com.bnguimgo.springboot.security.tymeleafloginform.modele.User;
 import com.bnguimgo.springboot.security.tymeleafloginform.service.LoginService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,19 +29,21 @@ public class UserController {
     }
 
     @GetMapping("/sign/signup")
-    public String showSignUpForm(User user) {
+    public String showSignUpForm(Model model) {
+        User user = new User();
+        model.addAttribute("user", user);
         return "add-user";
     }
 
     @PostMapping("/adduser")
-    //public String addUser(@Valid User user, BindingResult result, Model model) {
-    public String addUser(User user, BindingResult result, Model model) {
+    public String addUser(@Valid User user, BindingResult result, Model model) {
         if (result.hasErrors()) {
             return "add-user";
         }
 
         //userRepository.save(user);
-        return "redirect:home";
+        //return "redirect:home";
+        return "add-user";
     }
 
 }

@@ -50,7 +50,7 @@ public class ThymeleafWebMvcConfigurerImpl implements WebMvcConfigurer {
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/").setViewName("home");
+        registry.addViewController("/login").setViewName("home"); // renvoie la page d'accueil home.html
         //registry.addViewController("/logout").setViewName("home");
     }
 }

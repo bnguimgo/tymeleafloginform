@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 
 import java.net.MalformedURLException;
 import java.text.ParseException;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -38,33 +37,12 @@ public class CustomUserDetailsServiceImpl implements UserDetailsService {
         } catch (MalformedURLException | ParseException e) {
             throw new RuntimeException(e);
         }
-/*        Utilisateur utilisateur = new Utilisateur();
-        utilisateur.setUsername(username);
-        utilisateur.setDisplayName("Nguimgo" +" " +"Bertrand");
-        utilisateur.setRoles(Set.of(RoleEnum.ADMIN.name(), RoleEnum.MANAGER.name()));
-        Autorisation autorisation_admin = new Autorisation();
-        autorisation_admin.setRole(RoleEnum.ADMIN);
-        Autorisation autorisation_manager = new Autorisation();
-        autorisation_manager.setRole(RoleEnum.MANAGER);
-        utilisateur.setAutorisations(Set.of(autorisation_admin, autorisation_manager));
-        CustomUserDetails userDetails = new CustomUserDetails(utilisateur.getUsername(), utilisateur.getDisplayName(), buildAuthorities(utilisateur.getAutorisations()));
-        log.info("loadUserByUsername successful");
-        return userDetails;*/
     }
 
-    private Set<GrantedAuthority> buildAuthorities(Set<Autorisation> autorisations) {
-        Set<GrantedAuthority> authorities = new HashSet<>(autorisations.size());
-        for (Autorisation autorisation : autorisations) {
-            RoleEnum role = autorisation.getRole();
-            authorities.add(new SimpleGrantedAuthority(role.name()));
-        }
-        return authorities;
-    }
-
-    private Set<GrantedAuthority> buildAuthoritiesFromRole(Collection<Role> roles) {
+    private Set<GrantedAuthority> buildAuthoritiesFromRole(Set<String> roles) {
         Set<GrantedAuthority> authorities = new HashSet<>(roles.size());
-        for(Role role: roles){
-            authorities.add(new SimpleGrantedAuthority(role.getName()));
+        for(String role: roles){
+            authorities.add(new SimpleGrantedAuthority(role));
         }
         return authorities;
     }
