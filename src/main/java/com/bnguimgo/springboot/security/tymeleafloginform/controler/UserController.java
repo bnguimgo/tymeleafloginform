@@ -3,13 +3,13 @@ package com.bnguimgo.springboot.security.tymeleafloginform.controler;
 import com.bnguimgo.springboot.security.tymeleafloginform.modele.User;
 import com.bnguimgo.springboot.security.tymeleafloginform.service.LoginService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.MalformedURLException;
 import java.text.ParseException;
 
 //@RestController
@@ -24,8 +24,9 @@ public class UserController {
     }
 
     @GetMapping("/{email}")
-    public ResponseEntity<User> findByEmail(@PathVariable(value = "email") String email) throws MalformedURLException, ParseException {
-        return loginService.findByEmail(email);
+    public ResponseEntity<User> findByEmail(@PathVariable(value = "email") String email) throws ParseException {
+        //return loginService.findByEmail(email);
+        return new ResponseEntity<>(loginService.findByEmail(email), HttpStatus.OK);
     }
 
     @GetMapping("/sign/signup")

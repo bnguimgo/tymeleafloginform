@@ -4,32 +4,29 @@ import com.bnguimgo.springboot.security.tymeleafloginform.security.userdetails.C
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NonNull;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.Map;
 
 @Service
 @Slf4j
 public class CustomLogoutSuccessHandler implements LogoutHandler {
 
-/*    private final UserCache userCache;
-
-    public CustomLogoutHandler(UserCache userCache) {
-        this.userCache = userCache;
-    }*/
-
     @Override
-    public void logout(HttpServletRequest request, HttpServletResponse response,
+    public void logout(@NonNull final HttpServletRequest request, @NonNull final HttpServletResponse response,
                        Authentication authentication) {
-        //String userName = UserUtils.getAuthenticatedUserName();
-        //userCache.removeUserFromCache("xxx");
+
         if(null != authentication) {
             CustomUserDetails authenticatedUser = (CustomUserDetails) authentication.getPrincipal();
-            log.warn("User : {} logout successful, the authentication will be set to false", authenticatedUser.getDisplayName());
+            if(null != authenticatedUser) {
+                log.warn("User : {} logout successful, the authentication will be set to false", authenticatedUser.getDisplayName());
+            } else {
+                log.warn("No authenticated user ");
+            }
+
             authentication.setAuthenticated(false);
 
         } else {

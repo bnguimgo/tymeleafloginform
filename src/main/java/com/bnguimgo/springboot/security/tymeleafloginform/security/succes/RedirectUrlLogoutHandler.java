@@ -3,6 +3,9 @@ package com.bnguimgo.springboot.security.tymeleafloginform.security.succes;
 import com.bnguimgo.springboot.security.tymeleafloginform.config.PropertiesServiceConfig;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
@@ -17,6 +20,7 @@ import java.nio.charset.StandardCharsets;
  * See more information <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/logout-endpoint.html">here</a>.
  */
 @Component
+@NullMarked
 public class RedirectUrlLogoutHandler extends SimpleUrlLogoutSuccessHandler {
 
     @Autowired
@@ -26,7 +30,7 @@ public class RedirectUrlLogoutHandler extends SimpleUrlLogoutSuccessHandler {
      * Here, we must implement the new logout URL request. We define what URL to send our request to, and set out client_id and logout_uri parameters.
      */
     @Override
-    protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+    protected String determineTargetUrl(@NonNull final HttpServletRequest request, @NonNull final HttpServletResponse response, @Nullable final Authentication authentication) {
         return UriComponentsBuilder
                 .fromUri(URI.create(properties.getDomain() + "/logout"))
                 .queryParam("client_id", properties.getClientId())

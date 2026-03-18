@@ -5,6 +5,7 @@ import com.bnguimgo.springboot.security.tymeleafloginform.security.userdetails.C
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -33,9 +34,12 @@ public class UserAuthenticationSuccessHandler implements AuthenticationSuccessHa
     private OAuth2AuthorizedClientManager oAuth2AuthorizedClientManager;
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
+    public void onAuthenticationSuccess(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, Authentication authentication) throws IOException {
 
         DefaultOidcUser authenticatedUser = (DefaultOidcUser) authentication.getPrincipal();
+        if(authenticatedUser == null) {
+            throw new RuntimeException("Échec d'authentification ");
+        }
         Map<String, Object> authUserAttributes = authenticatedUser.getAttributes();
         String email = authUserAttributes.get("email").toString();
         authentication.setAuthenticated(true);
@@ -44,10 +48,10 @@ public class UserAuthenticationSuccessHandler implements AuthenticationSuccessHa
         CustomUserDetails userDetails = userDetailsService.loadUserByUsername(email);
         //userDetails.setAccessToken(getAccessToken().getTokenValue());
         userDetails.setIdToken(getIdToken().getTokenValue());
-            UsernamePasswordAuthenticationToken usernamePasswordAuthToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-            usernamePasswordAuthToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+        UsernamePasswordAuthenticationToken usernamePasswordAuthToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        usernamePasswordAuthToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-            SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthToken);
+        SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthToken);
 
         //If authentication success
         response.sendRedirect(request.getContextPath() + "/login");
@@ -77,8 +81,8 @@ public class UserAuthenticationSuccessHandler implements AuthenticationSuccessHa
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication instanceof OAuth2AuthenticationToken token && token.getPrincipal() instanceof DefaultOidcUser user) {
             OidcIdToken idToken = user.getIdToken();
-            log.info("Token raw value: {}", idToken.getTokenValue());
-            log.info("Token claims map: {}", idToken.getClaims());
+            log.info("Token raw value: {}", idToken.getTokenValue()); // ATTENTION à la sécurité, ne pas loguer ceci en production
+            log.info("Token claims map: {}", idToken.getClaims()); // ATTENTION à la sécurité, ne pas loguer ceci en production
             return idToken;
 
         }

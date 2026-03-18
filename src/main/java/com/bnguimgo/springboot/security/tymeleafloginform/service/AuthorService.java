@@ -10,7 +10,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
-import java.net.MalformedURLException;
 import java.text.ParseException;
 
 @Service
@@ -25,10 +24,16 @@ public class AuthorService {
         this.restClient = restClient;
     }
 
-    public ResponseEntity<AuthorDTO> getAuthorById(Long id) throws MalformedURLException, ParseException {
+    public ResponseEntity<AuthorDTO> getAuthorById(Long id) throws ParseException {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(null == authentication) {
+            throw new RuntimeException("Authentication required ");
+        }
         CustomUserDetails customUserDetails = (CustomUserDetails)authentication.getPrincipal();
+        if(null == customUserDetails) {
+            throw new RuntimeException("UserDetails required ");
+        }
         String idToken = customUserDetails.getIdToken();
         customIDTokenValidator.validate(idToken);
         return restClient.get()

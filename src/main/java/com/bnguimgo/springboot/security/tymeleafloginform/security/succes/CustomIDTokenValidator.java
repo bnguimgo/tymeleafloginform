@@ -12,10 +12,10 @@ import com.nimbusds.openid.connect.sdk.claims.IDTokenClaimsSet;
 import com.nimbusds.openid.connect.sdk.validators.IDTokenValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.text.ParseException;
 
@@ -31,17 +31,22 @@ public class CustomIDTokenValidator {
     PropertiesServiceConfig properties;
     private static final String MISSING_JWT_AUDIENCE = "Missing JWT audience (aud) claim";
 
-    public IDTokenValidator buildValidator() throws MalformedURLException {
+    public IDTokenValidator buildValidator() {
 
         // The required parameters
         Issuer iss = new Issuer(properties.getIssuerUri());
         ClientID clientID = new ClientID(properties.getClientId());
         JWSAlgorithm jwsAlg = JWSAlgorithm.RS256;
-        URL jwkSetURL = new URL(properties.getJwkSetUri());
+        URL jwkSetURL;
+        try {
+            jwkSetURL = URI.create(properties.getJwkSetUri()).toURL();
+        } catch (MalformedURLException e) {
+            throw new IllegalArgumentException("Invalid JWK Set URI", e);
+        }
         return new IDTokenValidator(iss, clientID, jwsAlg, jwkSetURL);
     }
 
-    public String validate (String token) throws ParseException, MalformedURLException {
+    public String validate (String token) throws ParseException {
 
         // Set the expected nonce, leave null if none
         //Nonce expectedNonce = new Nonce("hyfxBw5DlwS97Uo_fV9cscVp8JMqUWSovwzB4GmLKmg"); // or null

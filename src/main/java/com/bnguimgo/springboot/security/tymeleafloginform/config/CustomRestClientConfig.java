@@ -18,7 +18,7 @@ public class CustomRestClientConfig {
     PropertiesServiceConfig properties;
     @Bean
     public RestClient restClient() {
-        log.info("Client-Url = "+ properties.getClientUrl());
+        log.info("Client-Url = "+ properties.getClientUrl() +"/login");
         log.info("Server-Url = "+ properties.getServerUrl());
         log.info("Download-certificate-Url = "+ properties.getTokenUri());
         return RestClient.builder()

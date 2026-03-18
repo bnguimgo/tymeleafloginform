@@ -34,23 +34,23 @@ public class LoginService {
      * @throws MalformedURLException Renvoie une erreur en cas de mauvaise Url
      * @throws ParseException Parse le résultat
      */
-    public ResponseEntity<User> loginByEmail(String email) throws MalformedURLException, ParseException {
+    public User loginByEmail(String email) throws MalformedURLException, ParseException {
 
         String valideIdToken = validateToken(SecurityContextHolder.getContext().getAuthentication());
         return restClient.get()
                 .uri("/api/v1/users/{email}", email)
                 .header("Authorization", "Bearer " + valideIdToken)
                 .retrieve()
-                .toEntity(User.class);
+                .toEntity(User.class).getBody();
     }
 
-    private String validateToken(Authentication authentication) throws ParseException, MalformedURLException {
+    private String validateToken(Authentication authentication) throws ParseException {
         //Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(null == authentication) {
             throw new ParseException("Authentication required ", 0);
         }
-        if(authentication.getPrincipal() instanceof DefaultOidcUser customUserDetails) {
-            String idToken = customUserDetails.getIdToken().getTokenValue();
+        if(authentication.getPrincipal() instanceof DefaultOidcUser defaultOidcUser) {
+            String idToken = defaultOidcUser.getIdToken().getTokenValue();
             return customIDTokenValidator.validate(idToken);
         } else if(authentication.getPrincipal() instanceof CustomUserDetails customUserDetails) {
             String idToken = customUserDetails.getIdToken();
@@ -65,16 +65,15 @@ public class LoginService {
      *  Méthode nécessaire lorsque l'utilisateur est déjà connecté et présent dans le contexte
      * @param email Email de l'utilisateur
      * @return Renvoie les infos sur l'utilisateur
-     * @throws MalformedURLException Renvoie une erreur en cas de mauvaise Url
      * @throws ParseException Parse le résultat
      */
-    public ResponseEntity<User> findByEmail(String email) throws MalformedURLException, ParseException {
+    public User findByEmail(String email) throws ParseException {
 
         String valideIdToken = validateToken(SecurityContextHolder.getContext().getAuthentication());
         return restClient.get()
                 .uri("/api/v1/users/{email}", email)
                 .header("Authorization", "Bearer " + valideIdToken)
                 .retrieve()
-                .toEntity(User.class);
+                .toEntity(User.class).getBody();
     }
 }

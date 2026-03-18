@@ -54,7 +54,7 @@ public class AppSecurityConfig {
     }*/
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) {
 /*        Spring Security envoie par défaut plusieurs en-têtes HTTP de sécurité, dont :
 
         1-) X-Frame-Options → protège contre le clickjacking (--> Permet d’afficher la page dans une <iframe> du même domaine (localhost dans notre cas))

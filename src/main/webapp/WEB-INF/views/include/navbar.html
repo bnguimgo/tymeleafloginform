@@ -13,7 +13,15 @@
             </ul>
             <!-- Si l’utilisateur est connecté et possède le rôle ROLE_ADMIN → afficher son nom + bouton "Déconnexion" -->
             <ul sec:authorize="isAuthenticated()" class="nav navbar-nav navbar-right">
-                <li><a href="#"><span sec:authorize="hasAuthority('ROLE_ADMIN')">Connecté ADMIN - </span><strong th:text="${#authentication.getPrincipal().getDisplayName()}"></strong></a></li>
+                <!--<li><a href="#"><span sec:authorize="hasAuthority('ROLE_ADMIN')">Connecté ADMIN - </span><strong th:text="${#authentication.getPrincipal().getDisplayName()}"></strong></a></li>-->
+                <li>
+                    <a href="#"><span sec:authorize="hasAuthority('ROLE_ADMIN')">Connecté ADMIN - </span>
+                        <strong th:text="${#authentication.principal instanceof T(com.bnguimgo.springboot.security.tymeleafloginform.security.userdetails.CustomUserDetails)
+                            ? #authentication.principal.displayName
+                            : #authentication.name}">
+                        </strong>
+                    </a>
+                </li>
                 <li><a th:href="@{/logout}"><span class="glyphicon glyphicon-log-out">&nbsp;</span>Deconnexion</a></li>
             </ul>
             <!-- Si l’utilisateur n'est pas connecté → afficher le bouton Créer Compte + bouton "Connexion" -->

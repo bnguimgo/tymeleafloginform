@@ -1,6 +1,7 @@
 package com.bnguimgo.springboot.security.tymeleafloginform.security.userdetails;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,7 +14,8 @@ public class CustomUserDetails implements UserDetails {
 
     private final String username;
     @Getter
-    private final String displayName;
+    @Setter
+    private String displayName;
     @Getter
     @Setter
     private String idToken;
@@ -32,6 +34,7 @@ public class CustomUserDetails implements UserDetails {
 
 
     @Override
+    @NonNull
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;
     }
@@ -42,6 +45,7 @@ public class CustomUserDetails implements UserDetails {
     }
 
     @Override
+    @NonNull
     public String getUsername() {
         return username;
     }
@@ -74,11 +78,11 @@ public class CustomUserDetails implements UserDetails {
         return roles;
     }
 
-    public boolean hasRole(String role) {
+    public boolean hasAuthority(String role) {
         return roles.contains(role);
     }
 
-    public boolean hasAnyRole(String... anyRole) {
+    public boolean hasAnyAuthority(String... anyRole) {
         for (String role : anyRole) {
             if (roles.contains(role)) {
                 return true;
